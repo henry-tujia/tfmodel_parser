@@ -169,17 +169,21 @@ if __name__ == '__main__':
                 tf.compat.v1.import_graph_def(graph_def)
 
             for node in graph_def.node:
+                if "squeeze" in node.op.lower():
+                    print(node)
+                    break
                 res.add(node.op)
 
-        elif file.endswith('tflite'):
-            with open(os.path.join(pb_file_path, file), 'rb') as f:
-                buf = f.read()
-                model_inner = tflite.Model.Model.GetRootAs(buf, 0)
-                subgraph = model_inner.Subgraphs(0)
-                op_length = subgraph.OperatorsLength()
-                for index in range(op_length):
-                    temp_code = subgraph.Operators(index).OpcodeIndex()
-                    res.add(dic.inverse[temp_code])
-        else:
-            continue
-    print(res)
+    #     elif file.endswith('tflite'):
+    #         with open(os.path.join(pb_file_path, file), 'rb') as f:
+    #             buf = f.read()
+    #             model_inner = tflite.Model.Model.GetRootAs(buf, 0)
+    #             subgraph = model_inner.Subgraphs(0)
+    #             op_length = subgraph.OperatorsLength()
+    #             for index in range(op_length):
+    #                 temp_code = subgraph.Operators(index).OpcodeIndex()
+    #                 res.add(dic.inverse[temp_code])
+    #     else:
+    #         continue
+    # print(res)
+    # a = "A".lower()
